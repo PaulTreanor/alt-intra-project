@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2> Configure device </h2>
+<form action="" method="post">
+	<p>
+		{{form.device_name.label}} <br>
+		{{form.device_name(size=30)}}
+	</p>
+	<p>
+		{{form.sensor_sensitivity.label}} <br>
+		{{form.sensor_sensitivity(size=30)}}
+	</p>
+	<p>
+		{{form.liquid_dispensed.label}} <br>
+		{{form.liquid_dispensed(size=30)}}
+	</p>
+	<p>
+		{{form.submit()}} <br>
+		
+	</p>
+</form>	
+
+
+
+{% endblock %}
