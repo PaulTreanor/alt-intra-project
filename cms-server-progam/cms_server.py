@@ -6,16 +6,16 @@ import pickle
 app = Flask(__name__)
 app.config['SECRET_KEY'] ='altintra'
 
-
-#hardcoding some variables because no front end 
-live_devices = ["device_5"]    
-device_config_details = {
-			"sensor_sensitivity": 7,
-			"amount_dispensed": 50
-						}
-
+#default configuration for devices [solution dispensed, sensor sensitivity]
 global config_result
-config_result = {}
+config_result = {
+	"device 1" : [50, 75],
+	"device 2" : [50, 75],
+	"device 3" : [50, 75],
+	"device 4" : [50, 75],
+	"device 5" : [50, 75]
+}
+
 request_result = {}
 
 @app.route("/")
@@ -26,9 +26,16 @@ def home():
 def config():
 	form = ConfigForm()
 	if form.is_submitted():
+		#submitted data 
+		form_results = request.form
+		device_name = form_results["device_name"]
+		solution_dispensed = form_results["liquid_dispensed"]
+		sensor_sensitivity = form_results["sensor_sensitivity"]
+		#search for device name in global config results 
+
 		global config_result 
-		config_result = request.form
-		
+		if device_name in config_result:
+			config_result[device_name] = [solution_dispensed, sensor_sensitivity]
 	return render_template('config.html', form=form)
 
 @app.route("/request", methods=['GET', 'POST'])
@@ -42,7 +49,7 @@ def request_data():
 #put new config into into a domain . 
 @app.route('/cms/device_config/<device_id>')
 def update_device_config(device_id):
-	return config_result  
+	return config_result
 
 
 
