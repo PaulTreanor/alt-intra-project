@@ -31,8 +31,8 @@ def config():
 		device_name = form_results["device_name"]
 		solution_dispensed = form_results["liquid_dispensed"]
 		sensor_sensitivity = form_results["sensor_sensitivity"]
-		#search for device name in global config results 
 
+		#search for device name in global config results 
 		global config_result 
 		if device_name in config_result:
 			config_result[device_name] = [solution_dispensed, sensor_sensitivity]
@@ -43,10 +43,11 @@ def request_data():
 	form = RequestForm()
 	if form.is_submitted():
 		request_result = request.form
+		return render_template("urlsuppliedbynevan/<request_result>")
 	return render_template('request.html', form=form)
 
 
-#put new config into into a domain . 
+#put new config to a api url 
 @app.route('/cms/device_config/<device_id>')
 def update_device_config(device_id):
 	device_id = device_id.replace("_", " ")
