@@ -19,12 +19,11 @@ config_result = {
 	"device5" : [50, 75]
 }
 
-request_result = {}
-
 @app.route("/")
 def home():
 	return render_template('index.html')
 
+#device configuration form
 @app.route("/config", methods=['GET', 'POST'])
 def config():
 	form = ConfigForm()
@@ -41,6 +40,7 @@ def config():
 			config_result[device_name] = [solution_dispensed, sensor_sensitivity]
 	return render_template('config.html', form=form)
 
+#request device data
 @app.route("/request", methods=['GET', 'POST'])
 def request_data():
 	form = RequestForm()
@@ -51,7 +51,7 @@ def request_data():
 
 
 #put new config to a api url 
-@app.route('/cms/device_config/<device_id>')
+@app.route('/device_config/<device_id>')
 def update_device_config(device_id):
 	device_id = device_id.replace("_", " ")
 	return "".join(str(config_result[device_id]))
