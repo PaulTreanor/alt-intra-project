@@ -49,7 +49,8 @@ def request_data():
 #put new config into into a domain . 
 @app.route('/cms/device_config/<device_id>')
 def update_device_config(device_id):
-	return config_result
+	device_id = device_id.replace("_", " ")
+	return "".join(str(config_result[device_id]))
 
 
 
