@@ -14,6 +14,7 @@ device_config_details = {
 			"amount_dispensed": 50
 						}
 
+global config_result
 config_result = {}
 request_result = {}
 
@@ -25,6 +26,7 @@ def home():
 def config():
 	form = ConfigForm()
 	if form.is_submitted():
+		global config_result 
 		config_result = request.form
 		
 	return render_template('config.html', form=form)
