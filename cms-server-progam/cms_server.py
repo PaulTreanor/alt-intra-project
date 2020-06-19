@@ -1,7 +1,10 @@
 from flask import Flask, render_template, request
 from forms import ConfigForm
 from forms import RequestForm
+from threading import Thread
 import pickle
+import socket
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] ='altintra'
@@ -9,11 +12,11 @@ app.config['SECRET_KEY'] ='altintra'
 #default configuration for devices [solution dispensed, sensor sensitivity]
 global config_result
 config_result = {
-	"device 1" : [50, 75],
-	"device 2" : [50, 75],
-	"device 3" : [50, 75],
-	"device 4" : [50, 75],
-	"device 5" : [50, 75]
+	"device1" : [50, 75],
+	"device2" : [50, 75],
+	"device3" : [50, 75],
+	"device4" : [50, 75],
+	"device5" : [50, 75]
 }
 
 request_result = {}
@@ -52,10 +55,37 @@ def request_data():
 def update_device_config(device_id):
 	device_id = device_id.replace("_", " ")
 	return "".join(str(config_result[device_id]))
+    
+    
+#Added to connect device and cms    
+def run_server():
+    app.run(host = '0.0.0.0')
+    
+def listen_device():
+    HOST = ''
+    PORT = 5770
 
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
+    try:
+        s.bind((HOST,PORT))
+        
+    except socket.error as msg:
+        print('Bind Failed. Error Code : ' + str(msg[0]) + 'Message' + msg[1])
+        sys.exit()
 
+    print('Socket bind complete')
+
+    while True:
+        s.listen()
+        conn,addr = s.accept()
+        print( 'Connected with ' + addr[0] + ':' + str(addr[1]))
+        #addr0 is the ip
+    
 if __name__ == '__main__':
-    app.run(debug=True)
+    Thread(target=run_server).start()
+    Thread(target=listen_device).start()
+    
+
 
 
