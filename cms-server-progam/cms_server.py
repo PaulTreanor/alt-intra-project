@@ -56,7 +56,7 @@ def request_data():
 		request_result = request.form
 		device_ip_address = str(device_ips[request_result])
 
-		return render_template(device_ip_address + ":5000/device_data")
+		return render_template(device_ip_address + ":5000/device/device_data")
 	return render_template('request.html', form=form,  device_ips = list(device_ips.keys()))
 
 
