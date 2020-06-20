@@ -81,6 +81,7 @@ def listen_device():
         conn,addr = s.accept()
         print( 'Connected with ' + addr[0] + ':' + str(addr[1]))
         #addr0 is the ip
+		data = conn.recv(1024).decode()
     
 if __name__ == '__main__':
     Thread(target=run_server).start()
