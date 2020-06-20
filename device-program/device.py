@@ -7,22 +7,26 @@ cms_ip =""
 file = ""
 id_no = ""
 
-#device finding its own ip
+#try to connect to this ip address
 def find(hostname, port):
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	s.settimeout(0.25)
 	conn = s.connect_ex((hostname, port))
+	if conn == 0:
+		s.sendall(id_no.encode())
 	s.close()
 	return conn == 0
 
 
 #device searching for the cms
 def search():
+	#device getting its own ip
 	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 	s.connect(("8.8.8.8", 80))
 	device_ip = s.getsockname()[0]
 	ip = device_ip[0:10]
 	s.close()
+	# searching for device
 	for i in range(0,255):
 		print(ip+str(i))
 		res = find(ip+str(i), 5770)
@@ -50,7 +54,7 @@ def stat_updater():
 def config_updater():
 	while True:
 		print("Updating Configuration File")
-		link =  "http://" + cms_ip + ":5000" + "/cms/device_config/" +"device"+id_no
+		link =  "http://" + cms_ip + ":5000" + "/device_config/" +"device"+id_no
 		l = urllib.request.urlopen(link)           
 		condata = l.read().decode()  
 		f = open("config.txt", "w")
